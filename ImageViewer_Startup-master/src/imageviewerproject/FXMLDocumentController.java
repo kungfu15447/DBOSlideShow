@@ -35,6 +35,10 @@ public class FXMLDocumentController implements Initializable
 
     @FXML
     private ImageView imageView;
+    @FXML
+    private Button btnStart;
+    @FXML
+    private Button btnStop;
 
     private void handleBtnLoadAction(ActionEvent event)
     {
@@ -98,6 +102,16 @@ public class FXMLDocumentController implements Initializable
         {
             handleBtnNextAction(event);
         });
+    }
+
+    @FXML
+    private void handlerStartSlideshow(ActionEvent event)
+    {
+    }
+
+    @FXML
+    private void handlerStopSlideshow(ActionEvent event)
+    {
     }
 
 }

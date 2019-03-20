@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="703.0" prefWidth="1091.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="imageviewerproject.FXMLDocumentController">
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="703.0" prefWidth="1091.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="imageviewerproject.FXMLDocumentController">
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="57.0" prefWidth="1091.0" BorderPane.alignment="CENTER">
          <children>
@@ -25,6 +25,12 @@
                   </Button>
                   <Button id="btnNext" fx:id="btnNext" mnemonicParsing="false" text="Next" />
                </buttons>
+            </ButtonBar>
+            <ButtonBar prefHeight="57.0" prefWidth="339.0">
+              <buttons>
+                <Button fx:id="btnStart" mnemonicParsing="false" onAction="#handlerStartSlideshow" prefHeight="31.0" prefWidth="146.0" text="Start slideshow" />
+                  <Button fx:id="btnStop" mnemonicParsing="false" onAction="#handlerStopSlideshow" prefHeight="31.0" prefWidth="178.0" text="Stop slideshow" />
+              </buttons>
             </ButtonBar>
          </children>
          <opaqueInsets>
