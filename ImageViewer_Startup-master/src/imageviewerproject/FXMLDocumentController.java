@@ -5,6 +5,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,9 +23,10 @@ import javafx.stage.Stage;
 
 public class FXMLDocumentController implements Initializable
 {
+
     private final List<Image> images = new ArrayList<>();
     private int currentImageIndex = 0;
-
+    private ExecutorService executor;
     @FXML
     Parent root;
 
@@ -44,10 +50,10 @@ public class FXMLDocumentController implements Initializable
     {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select image files");
-        fileChooser.getExtensionFilters().add(new ExtensionFilter("Images", 
-            "*.png", "*.jpg", "*.gif", "*.tif", "*.bmp"));        
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("Images",
+                "*.png", "*.jpg", "*.gif", "*.tif", "*.bmp"));
         List<File> files = fileChooser.showOpenMultipleDialog(new Stage());
-                
+
         if (!files.isEmpty())
         {
             files.forEach((File f) ->
@@ -62,8 +68,8 @@ public class FXMLDocumentController implements Initializable
     {
         if (!images.isEmpty())
         {
-            currentImageIndex = 
-                    (currentImageIndex - 1 + images.size()) % images.size();
+            currentImageIndex
+                    = (currentImageIndex - 1 + images.size()) % images.size();
             displayImage();
         }
     }
@@ -97,7 +103,7 @@ public class FXMLDocumentController implements Initializable
         {
             handleBtnPreviousAction(event);
         });
-        
+
         btnNext.setOnAction((ActionEvent event) ->
         {
             handleBtnNextAction(event);
@@ -107,11 +113,34 @@ public class FXMLDocumentController implements Initializable
     @FXML
     private void handlerStartSlideshow(ActionEvent event)
     {
+        Runnable task = () ->
+        {
+            try
+            {
+                for (int i = 0; i < images.size(); i++)
+                {
+
+                    if (i == images.size() - 1)
+                    {
+                        i = 0;
+                    }
+                    imageView.setImage(images.get(i));
+                    TimeUnit.MILLISECONDS.sleep(2000);
+
+                }
+            } catch (InterruptedException ex)
+            {
+                
+            }
+        };
+        executor = Executors.newSingleThreadExecutor();
+        executor.submit(task);
     }
 
     @FXML
     private void handlerStopSlideshow(ActionEvent event)
     {
+        executor.shutdownNow();
     }
 
 }
