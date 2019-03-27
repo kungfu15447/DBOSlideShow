@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -25,6 +26,7 @@ public class FXMLDocumentController implements Initializable
 {
 
     private final List<Image> images = new ArrayList<>();
+    private final List<String> imageNames = new ArrayList<>();
     private int currentImageIndex = 0;
     private ExecutorService executor;
     @FXML
@@ -45,6 +47,8 @@ public class FXMLDocumentController implements Initializable
     private Button btnStart;
     @FXML
     private Button btnStop;
+    @FXML
+    private Label lblMessage;
 
     private void handleBtnLoadAction(ActionEvent event)
     {
@@ -59,6 +63,7 @@ public class FXMLDocumentController implements Initializable
             files.forEach((File f) ->
             {
                 images.add(new Image(f.toURI().toString()));
+                imageNames.add(f.getName());
             });
             displayImage();
         }
@@ -80,6 +85,7 @@ public class FXMLDocumentController implements Initializable
         {
             currentImageIndex = (currentImageIndex + 1) % images.size();
             displayImage();
+            
         }
     }
 
@@ -88,6 +94,7 @@ public class FXMLDocumentController implements Initializable
         if (!images.isEmpty())
         {
             imageView.setImage(images.get(currentImageIndex));
+            lblMessage.setText(imageNames.get(currentImageIndex));
         }
     }
 
@@ -109,7 +116,7 @@ public class FXMLDocumentController implements Initializable
             handleBtnNextAction(event);
         });
     }
-
+    
     @FXML
     private void handlerStartSlideshow(ActionEvent event)
     {
@@ -117,15 +124,17 @@ public class FXMLDocumentController implements Initializable
         {
             try
             {
-                for (int i = 0; i < images.size(); i++)
+                for (int i = currentImageIndex; i < images.size(); i++)
                 {
-
+                    currentImageIndex = i;
                     if (i == images.size() - 1)
                     {
                         i = 0;
                     }
                     imageView.setImage(images.get(i));
-                    TimeUnit.MILLISECONDS.sleep(2000);
+                    lblMessage.setText(imageNames.get(currentImageIndex));
+                    TimeUnit.MILLISECONDS.sleep(1500);
+                    
 
                 }
             } catch (InterruptedException ex)
@@ -142,5 +151,4 @@ public class FXMLDocumentController implements Initializable
     {
         executor.shutdownNow();
     }
-
 }
