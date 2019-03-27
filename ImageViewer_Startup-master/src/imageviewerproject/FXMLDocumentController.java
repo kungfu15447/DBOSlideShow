@@ -10,6 +10,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -85,7 +86,7 @@ public class FXMLDocumentController implements Initializable
         {
             currentImageIndex = (currentImageIndex + 1) % images.size();
             displayImage();
-            
+
         }
     }
 
@@ -116,7 +117,7 @@ public class FXMLDocumentController implements Initializable
             handleBtnNextAction(event);
         });
     }
-    
+
     @FXML
     private void handlerStartSlideshow(ActionEvent event)
     {
@@ -131,19 +132,22 @@ public class FXMLDocumentController implements Initializable
                     {
                         i = 0;
                     }
-                    imageView.setImage(images.get(i));
-                    lblMessage.setText(imageNames.get(currentImageIndex));
+                    Platform.runLater(() ->
+                    {
+                        imageView.setImage(images.get(currentImageIndex));
+                        lblMessage.setText(imageNames.get(currentImageIndex));
+                    });
                     TimeUnit.MILLISECONDS.sleep(1500);
-                    
 
                 }
             } catch (InterruptedException ex)
             {
-                
+
             }
         };
         executor = Executors.newSingleThreadExecutor();
         executor.submit(task);
+
     }
 
     @FXML
