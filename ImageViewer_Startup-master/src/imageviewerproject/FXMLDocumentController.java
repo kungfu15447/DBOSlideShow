@@ -119,7 +119,7 @@ public class FXMLDocumentController implements Initializable
     }
 
     @FXML
-    private void handlerStartSlideshow(ActionEvent event)
+    private synchronized void handlerStartSlideshow(ActionEvent event)
     {
         Runnable task = () ->
         {
