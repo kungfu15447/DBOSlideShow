@@ -117,7 +117,7 @@ public class FXMLDocumentController implements Initializable
         {
             try
             {
-                for (int i = 0; i < images.size(); i++)
+                for (int i = currentImageIndex; i < images.size(); i++)
                 {
 
                     if (i == images.size() - 1)
