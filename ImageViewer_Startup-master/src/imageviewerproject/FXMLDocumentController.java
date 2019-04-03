@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 public class FXMLDocumentController implements Initializable
 {
 
+    Slideshow show;
     private final List<Image> images = new ArrayList<>();
     private final List<String> imageNames = new ArrayList<>();
     private int currentImageIndex = 0;
@@ -68,6 +69,7 @@ public class FXMLDocumentController implements Initializable
             });
             displayImage();
         }
+        show = new Slideshow(images, imageNames, imageView, lblMessage);
     }
 
     private void handleBtnPreviousAction(ActionEvent event)
@@ -121,38 +123,12 @@ public class FXMLDocumentController implements Initializable
     @FXML
     private synchronized void handlerStartSlideshow(ActionEvent event)
     {
-        Runnable task = () ->
-        {
-            try
-            {
-                for (int i = currentImageIndex; i < images.size(); i++)
-                {
-                    currentImageIndex = i;
-                    if (i == images.size() - 1)
-                    {
-                        i = 0;
-                    }
-                    Platform.runLater(() ->
-                    {
-                        imageView.setImage(images.get(currentImageIndex));
-                        lblMessage.setText(imageNames.get(currentImageIndex));
-                    });
-                    TimeUnit.MILLISECONDS.sleep(1500);
-
-                }
-            } catch (InterruptedException ex)
-            {
-
-            }
-        };
-        executor = Executors.newSingleThreadExecutor();
-        executor.submit(task);
-
+        show.start();
     }
 
     @FXML
-    private void handlerStopSlideshow(ActionEvent event)
+    private synchronized void handlerStopSlideshow(ActionEvent event)
     {
-        executor.shutdownNow();
+        show.stop();
     }
 }
